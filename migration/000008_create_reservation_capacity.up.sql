@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS reservations (
+	id SERIAL PRIMARY KEY,
+	user_id INTEGER NOT NULL,
+	movie_premier_id INTEGER NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	
+	CONSTRAINT fk_movie_premier_id
+		FOREIGN KEY (movie_premier_id)
+		REFERENCES moviepremier(id),
+
+	CONSTRAINT fk_user_id
+		FOREIGN KEY (user_id)
+		REFERENCES users(id)
+);
+
+ALTER TABLE IF EXISTS reservationcapacity
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

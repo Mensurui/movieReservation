@@ -29,6 +29,10 @@ func NewServer(db *sql.DB) *gin.Engine {
 	adminService := service.NewAdminService(adminRepo)
 	adminHandler := handlers.NewAdminHandlers(*adminService)
 
+	userRepo := postgres.NewPostgresUserRepository(db)
+	userService := service.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandlers(*userService)
+
 	apiV1 := router.Group("/v1")
 
 	{
@@ -44,6 +48,15 @@ func NewServer(db *sql.DB) *gin.Engine {
 
 			adminGroup.POST("/movie-premier/add", adminHandler.AddMoviePremier)
 
+		}
+	}
+
+	{
+		userGroup := apiV1.Group("/user")
+		{
+			userGroup.POST("/register", userHandler.Register)
+			userGroup.GET("/movie", userHandler.GetMovie)
+			userGroup.POST("/reserve-seat/:id", userHandler.ReserveSeat)
 		}
 	}
 
